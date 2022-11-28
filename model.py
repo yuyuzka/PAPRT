@@ -22,7 +22,7 @@ class STiSAN(nn.Module):
         self.inr_awa_attn_layer = InrEncoderLayer(features * 2, exp_factor, dropout,n_heads=8)
         self.inr_awa_attn_block = InrEncoder(features * 2, self.inr_awa_attn_layer, depth)
 
-        self.attn=Attn(self.emb_loc,self.emb_quadkey,n_loc-1,n_quadkey-1)
+        # self.attn=Attn(self.emb_loc,self.emb_quadkey,n_loc-1,n_quadkey-1)
 
         self.trg_awa_attn_decoder = TrgAwaDecoder(features * 2,features*2,dropout)
 
@@ -79,7 +79,7 @@ class STiSAN(nn.Module):
         # (b, n, 2 * d)
         src = self.inr_awa_attn_block(src, r_mat, attn_mask, pad_mask)
         # src = self.inr_awa_attn_block(src, attn_mask, pad_mask)
-        srcout=self.attn(src,ds)
+        # srcout=self.attn(src,ds)
 
         if self.training:
             # (b, n * (1 + k), 2 * d)
@@ -95,7 +95,7 @@ class STiSAN(nn.Module):
         # (b, 1 + k)
         output = torch.sum(src * trg, dim=-1)
         # srcout=self.fc_loc(src)
-        return output,srcout
+        return output
         # return output
 
     def save(self, path):

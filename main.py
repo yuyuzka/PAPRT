@@ -24,8 +24,8 @@ if __name__ == "__main__":
     matrix_path = path_prefix+ data_name + '_swc_matrix.data'
     log_path = path_prefix + data_name + 'log.txt'
     result_path = path_prefix + data_name + 'result.txt'
-    model_path = path_prefix+data_name+"embedding_512_model"
-    load_path=path_prefix+data_name+"embedding_512_model"+str(finished_epoch-1)+".pth"
+    model_path = path_prefix+data_name+"model_loss"
+    load_path=path_prefix+data_name+"model_loss"+str(finished_epoch-1)+".pth"
 
     print("begin")
     # Data Process details

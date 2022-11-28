@@ -57,17 +57,17 @@ def train(model, max_len, train_data, train_sampler, train_bsz, train_num_neg, n
             #                trg_loc, trg_quadkey, key_pad_mask, mem_mask, data_size,src_period)
             # output ,src_out= model(src_loc, src_quadkey, src_time, pad_mask, attn_mask,
             #                trg_loc, trg_quadkey, key_pad_mask, mem_mask, data_size)
-            output ,src_out= model(src_loc, src_quadkey, src_time, pad_mask, attn_mask,
+            output = model(src_loc, src_quadkey, src_time, pad_mask, attn_mask,
                            trg_loc, trg_quadkey, key_pad_mask, mem_mask, data_size,
                            src_period, w_mat, c_mat)
            
-            output_forloss=src_out
-            sorted=output_forloss.max(dim=-1,keepdim=True)
+            # output_forloss=src_out
+            # sorted=output_forloss.max(dim=-1,keepdim=True)
             # print(sorted[0])
-            prob, order = output_forloss.topk(k=1, dim=-1, largest=True)
+            # prob, order = output_forloss.topk(k=1, dim=-1, largest=True)
             trg_idx = rearrange(rearrange(trg_loc, 'b (k n) -> b k n', k=1 + train_num_neg), 'b k n -> b n k')
             pos_idx,neg_idx = trg_idx.split([1, train_num_neg], -1)
-            dis_for_loss=dis_loss(order,pos_idx,id2gps,prob)
+            # dis_for_loss=dis_loss(order,pos_idx,id2gps,prob)
             
             output = rearrange(rearrange(output, 'b (k n) -> b k n', k=1 + train_num_neg), 'b k n -> b n k')
             pos_scores, neg_scores = output.split([1, train_num_neg], -1)
@@ -75,18 +75,18 @@ def train(model, max_len, train_data, train_sampler, train_bsz, train_num_neg, n
             keep = [torch.ones(e, dtype=torch.float32).to(device) for e in data_size]
             keep = fix_length(keep, 1, max_len, dtype="exclude padding term")
 
-            sampe_loss = torch.sum(loss * keep) / torch.sum(torch.tensor(data_size).to(device))
-            loss=0.01*dis_for_loss+sampe_loss
+            loss = torch.sum(loss * keep) / torch.sum(torch.tensor(data_size).to(device))
+            # loss=0.01*dis_for_loss+sampe_loss
             
             loss.backward()
             optimizer.step()
             if(batch_idx%100==0):
                 writer.add_scalar("loss",loss.item(),batch_idx+epoch_idx*batch_iterator.total)
-                writer.add_scalar("sampe_loss",sampe_loss.item(),batch_idx+epoch_idx*batch_iterator.total)
-                writer.add_scalar("dis_for_loss",dis_for_loss.item(),batch_idx+epoch_idx*batch_iterator.total)
+                # writer.add_scalar("sampe_loss",sampe_loss.item(),batch_idx+epoch_idx*batch_iterator.total)
+                # writer.add_scalar("dis_for_loss",dis_for_loss.item(),batch_idx+epoch_idx*batch_iterator.total)
             running_loss += loss.item()
             processed_batch += 1
-            batch_iterator.set_postfix_str(f"loss={loss.item():.4f}, sample_loss={sampe_loss.item():4f}, dis_for_loss={dis_for_loss.item():4f}")
+            batch_iterator.set_postfix_str(f"loss={loss.item():.4f}")
 
         epoch_time = time.time() - start_time
         cur_avg_loss = running_loss / processed_batch
