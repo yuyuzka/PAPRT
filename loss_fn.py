@@ -35,8 +35,8 @@ class distance_loss(nn.Module):
         trg_label = rearrange(trg_loc, 'b n l -> ( b n )l').expand(-1,2*l)
         prob = rearrange(prob, 'b n l -> ( b n )l')
         # trg_label =trg_label.expand(-1,2*l)
-        # value=tensor(list(id2gps.values())).to('cuda:0')
-        value=tensor(list(id2gps.values())).to('cpu')
+        value=tensor(list(id2gps.values())).to('cuda:0')
+        # value=tensor(list(id2gps.values())).to('cpu')
         predict_gps_test = value.gather(0,predict_label)
         trg_gps_test = value.gather(0,trg_label)
         d_gps=trg_gps_test-predict_gps_test
@@ -47,8 +47,10 @@ class distance_loss(nn.Module):
         r=6371
         dis=torch.floor(c*r)
         
-        dis_loss= torch.mean(prob*dis) 
+        dis_loss= torch.mean(prob*dis)
+        
         if(dis_loss<1):
             return self.dis_weight*dis_loss
+        
         
         return dis_loss

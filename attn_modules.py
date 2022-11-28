@@ -264,8 +264,8 @@ class Attn(nn.Module):
     def forward(self, src,ds):
         [N,L,M]=src.shape
         candidates_locs = torch.linspace(1, int(self.loc_max), int(self.loc_max)).long()  # (L)
-        # candidates_locs = candidates_locs.unsqueeze(0).expand(N, -1).to('cuda:0')  # (N, L)
-        candidates_locs = candidates_locs.unsqueeze(0).expand(N, -1).to('cpu')
+        candidates_locs = candidates_locs.unsqueeze(0).expand(N, -1).to('cuda:0')  # (N, L)
+        # candidates_locs = candidates_locs.unsqueeze(0).expand(N, -1).to('cpu')
         emb_candidates_locs = self.emb_loc(candidates_locs)  # (N, L, emb)
         src=torch.split(src,64,-1)[0]
         # candidates_quadkeys=torch.linspace(1, int(self.quadkey_max), int(self.quadkey_max)).long()

@@ -17,8 +17,8 @@ class TAPE(nn.Module):
         time_[:, 1:] = time[:, :-1]
         mask = [torch.ones(e, dtype=torch.float32) for e in data_size]
         # (b, n)
-        mask = fix_length(mask, 1, n, "exclude padding term").to('cpu')
-        # mask = fix_length(mask, 1, n, "exclude padding term").to('cuda:0')
+        # mask = fix_length(mask, 1, n, "exclude padding term").to('cpu')
+        mask = fix_length(mask, 1, n, "exclude padding term").to('cuda:0')
 
         #时间间隔关键代码    
         # (b, n)
@@ -38,8 +38,8 @@ class TAPE(nn.Module):
             pos[:, k] = pos[:, k - 1] + interval[:, k] + 1
         pos = pos.masked_fill(mask == 0, 0.0)
         # 位置编码
-        div_term = torch.exp(torch.arange(0, d, 2) * -(math.log(10000.0) / d)).to('cpu')
-        # div_term = torch.exp(torch.arange(0, d, 2) * -(math.log(10000.0) / d)).to('cuda:0')
+        # div_term = torch.exp(torch.arange(0, d, 2) * -(math.log(10000.0) / d)).to('cpu')
+        div_term = torch.exp(torch.arange(0, d, 2) * -(math.log(10000.0) / d)).to('cuda:0')
         # (b, n, d)
         tape = torch.zeros_like(x)
         tape[:, :, 0::2] = torch.sin(pos[:].unsqueeze(-1) * div_term.unsqueeze(0))
