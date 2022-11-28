@@ -21,7 +21,7 @@ def evaluate(model, max_len, eval_data, eval_sampler, eval_batch_size, eval_num_
             # t_mat = t_mat_.to(device)
             # g_mat = g_mat_.to(device)
             w_mat = w_mat.to(device)
-            s_mat = s_mat.to(device)
+            # s_mat = s_mat.to(device)
             c_mat = c_mat.to(device)
             trg_loc = trg_locs_.to(device)
             trg_quadkey = trg_quadkeys_.to(device)

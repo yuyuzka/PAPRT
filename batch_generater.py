@@ -54,11 +54,11 @@ def cf_train_quadkey(batch, data_source, max_len, sampler, quadkey_processor, lo
 
 def cf_eval_quadkey(batch, data_source, max_len, sampler, quadkey_processor, loc2quadkey, num_neg):
     # src_seq, trg_seq, t_mat, g_mat = zip(*batch)
-    src_seq, trg_seq, w_mat, s_mat,c_mat= zip(*batch)
+    src_seq, trg_seq, w_mat, c_mat= zip(*batch)
     # t_mat_ = torch.stack(t_mat)
     # g_mat_ = torch.stack(g_mat)
     w_mat = torch.stack(w_mat)
-    s_mat = torch.stack(s_mat)
+    # s_mat = torch.stack(s_mat)
     c_mat = torch.stack(c_mat)
     src_locs_, src_quadkeys_, src_times_ = [], [], []
     data_size = []
@@ -98,4 +98,4 @@ def cf_eval_quadkey(batch, data_source, max_len, sampler, quadkey_processor, loc
 
     # return src_locs_, src_quadkeys_, src_times_, t_mat_, g_mat_, trg_locs_, trg_quadkeys_, data_size,src_periods_
     # return src_locs_, src_quadkeys_, src_times_,  trg_locs_, trg_quadkeys_, data_size
-    return src_locs_, src_quadkeys_, src_times_, w_mat, s_mat,c_mat, trg_locs_, trg_quadkeys_, data_size,src_periods_
+    return src_locs_, src_quadkeys_, src_times_, w_mat, c_mat, trg_locs_, trg_quadkeys_, data_size,src_periods_
