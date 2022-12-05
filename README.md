@@ -1,4 +1,0 @@
-# PAPRT
-modified model
-
-inited
